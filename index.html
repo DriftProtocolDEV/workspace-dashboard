@@ -6,115 +6,105 @@
   <title>Workspace Dashboard</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="app.webmanifest">
-  <meta name="theme-color" content="#07090e">
-  <meta name="description" content="Personal static PWA dashboard for Google Workspace tools and quick notes.">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="description" content="Premium personal Workspace Dashboard PWA">
 </head>
 <body>
-  <div class="app-container">
-    <!-- Sidebar -->
-    <aside id="sidebar-left" class="sidebar">
-      <div class="sidebar-brand">
-        <div class="brand-logo">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
-        </div>
-        <span class="brand-name">Workspace</span>
+  <div class="app-window">
+    <!-- Fake Native Title Bar -->
+    <div class="title-bar">
+      <div class="window-controls">
+        <div class="control close"></div>
+        <div class="control minimize"></div>
+        <div class="control maximize"></div>
       </div>
-
-      <!-- Account Switcher -->
-      <div class="account-switcher-panel">
-        <div class="panel-section-title">Google Session</div>
-        <div class="custom-select-wrapper">
-          <label for="account-select" class="field-label">Active Account</label>
-          <div class="select-container">
-            <select id="account-select">
-              <option value="0">Account 0</option>
-              <option value="1">Account 1</option>
-              <option value="2">Account 2</option>
-              <option value="3">Account 3</option>
-            </select>
-          </div>
-        </div>
+      <div class="title">Workspace Dashboard</div>
+      <div class="account-switcher">
+        <label for="account-select">Account:</label>
+        <select id="account-select">
+          <option value="0">Personal (0)</option>
+          <option value="1">Work (1)</option>
+          <option value="2">Account 2</option>
+          <option value="3">Account 3</option>
+        </select>
       </div>
+    </div>
 
-      <!-- Quick Notes -->
-      <section class="sidebar-notes">
-        <div class="notes-header">
-          <div>
-            <div class="panel-section-title">Quick Notes</div>
-          </div>
-          <button id="notes-clear-btn" class="notes-icon-btn" type="button" title="Clear notes">🗑</button>
+    <div class="main-content">
+      <!-- Workspace Apps Launcher -->
+      <section class="launcher-section">
+        <div class="section-header">
+          <h2>Workspace Apps</h2>
+          <p class="subtitle">Click to open in dedicated window</p>
         </div>
-        <textarea id="quick-notes" class="quick-notes" spellcheck="true" placeholder="Capture links, reminders, snippets..."></textarea>
-        <div id="notes-save-status" class="notes-save-status">Ready</div>
+        
+        <div class="launcher-grid">
+          <button class="app-button" data-app="gmail" data-url="https://mail.google.com/mail/u/">
+            <div class="app-icon">📧</div>
+            <div class="app-name">Gmail</div>
+            <div class="app-desc">Email</div>
+          </button>
+
+          <button class="app-button" data-app="calendar" data-url="https://calendar.google.com/calendar/u/">
+            <div class="app-icon">📅</div>
+            <div class="app-name">Calendar</div>
+            <div class="app-desc">Schedule</div>
+          </button>
+
+          <button class="app-button" data-app="drive" data-url="https://drive.google.com/drive/u/">
+            <div class="app-icon">☁️</div>
+            <div class="app-name">Drive</div>
+            <div class="app-desc">Files</div>
+          </button>
+
+          <button class="app-button" data-app="docs" data-url="https://docs.google.com/document/u/">
+            <div class="app-icon">📄</div>
+            <div class="app-name">Docs</div>
+            <div class="app-desc">Documents</div>
+          </button>
+
+          <button class="app-button" data-app="sheets" data-url="https://docs.google.com/spreadsheets/u/">
+            <div class="app-icon">📊</div>
+            <div class="app-name">Sheets</div>
+            <div class="app-desc">Spreadsheets</div>
+          </button>
+
+          <button class="app-button" data-app="slides" data-url="https://docs.google.com/presentation/u/">
+            <div class="app-icon">📽️</div>
+            <div class="app-name">Slides</div>
+            <div class="app-desc">Presentations</div>
+          </button>
+
+          <button class="app-button" data-app="keep" data-url="https://keep.google.com/u/">
+            <div class="app-icon">🗒️</div>
+            <div class="app-name">Keep</div>
+            <div class="app-desc">Notes</div>
+          </button>
+
+          <button class="app-button" data-app="gemini" data-url="https://gemini.google.com/app?authuser=">
+            <div class="app-icon">✨</div>
+            <div class="app-name">Gemini</div>
+            <div class="app-desc">AI Assistant</div>
+          </button>
+        </div>
       </section>
 
-      <div class="sidebar-footer">
-        <p class="hint">Static PWA • Data in browser only • Links use your Google session</p>
-      </div>
-    </aside>
-
-    <!-- Main Workspace -->
-    <main id="main-panel" class="main-content">
-      <header class="app-header">
-        <div class="header-left">
-          <button id="menu-toggle-btn" class="header-icon-btn" title="Toggle Sidebar">☰</button>
-          <h1 id="active-app-title">Dashboard</h1>
-          <span id="active-account-badge" class="badge">Session 0</span>
-        </div>
-
-        <div class="address-bar-container">
-          <input type="text" id="workspace-url-display" readonly value="">
-          <button id="copy-url-btn" class="address-bar-btn" title="Copy URL">⎘</button>
-        </div>
-
-        <div class="header-right">
-          <button id="workspace-refresh-btn" class="header-icon-btn" title="Reload">⟳</button>
-          <button id="workspace-open-btn" class="header-icon-btn" title="Open in New Tab">↗</button>
-          <div class="divider"></div>
-          <button id="launcher-toggle-btn" class="header-icon-btn highlight" title="Toggle Launcher">Apps</button>
-        </div>
-      </header>
-
-      <div class="iframe-viewport">
-        <iframe id="workspace-iframe" title="Workspace" allow="clipboard-write"></iframe>
-        <div id="workspace-frame-fallback" class="frame-fallback hidden">
-          <div class="frame-fallback-panel">
-            <h2>Content blocked or loading</h2>
-            <p>Some Google apps block embedding. Use "Open in new tab" for full access.</p>
-            <div class="frame-fallback-actions">
-              <button id="workspace-retry-btn">Retry</button>
-              <button id="workspace-fallback-open-btn">Open tab</button>
-            </div>
+      <!-- Quick Notes -->
+      <section class="notes-section">
+        <div class="section-header">
+          <h2>Quick Notes</h2>
+          <div class="notes-actions">
+            <span id="save-status" class="save-status">Saved locally</span>
+            <button id="clear-notes" class="clear-btn">Clear</button>
           </div>
         </div>
-      </div>
-    </main>
+        <textarea id="quick-notes" placeholder="Jot down ideas, tasks, or reminders. Everything is saved automatically in your browser..."></textarea>
+      </section>
+    </div>
 
-    <!-- Launcher Panel -->
-    <aside id="sandbox-panel" class="sandbox-sidebar">
-      <div class="sandbox-header">
-        <span>Launcher</span>
-        <button id="sandbox-close-btn" class="header-icon-btn">×</button>
-      </div>
-      <div class="sandbox-controls">
-        <form id="sandbox-nav-form" class="sandbox-search-box">
-          <input type="text" id="sandbox-query-input" placeholder="Search or enter URL...">
-          <button type="submit" class="sandbox-go-btn">→</button>
-        </form>
-        <nav class="sandbox-quick-links" aria-label="Quick apps">
-          <button class="quick-link-btn" data-title="Gmail" data-url="https://mail.google.com/mail/">Gmail</button>
-          <button class="quick-link-btn" data-title="Calendar" data-url="https://calendar.google.com/calendar/r">Calendar</button>
-          <button class="quick-link-btn" data-title="Drive" data-url="https://drive.google.com/drive/my-drive">Drive</button>
-          <button class="quick-link-btn" data-title="Docs" data-url="https://docs.google.com/document/">Docs</button>
-          <button class="quick-link-btn" data-title="Sheets" data-url="https://sheets.google.com/">Sheets</button>
-          <button class="quick-link-btn" data-title="Slides" data-url="https://slides.google.com/">Slides</button>
-          <button class="quick-link-btn" data-title="Gemini" data-url="https://gemini.google.com/">Gemini</button>
-          <button class="quick-link-btn" data-title="Keep" data-url="https://keep.google.com/">Keep</button>
-        </nav>
-      </div>
-    </aside>
+    <div class="status-bar">
+      <span>Workspace Dashboard • PWA • All data stays on device</span>
+    </div>
   </div>
 
   <script src="app.js"></script>
