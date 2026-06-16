@@ -3,58 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Workspace Dashboard</title>
+  <title>Workspace</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="app.webmanifest">
 </head>
 <body>
-  <div class="app-grid">
-          <button class="app-card" onclick="window.open('https://mail.google.com/mail/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
-            <span class="icon">📧</span>
-            <span class="label">Gmail</span>
-          </button>
-          <button class="app-card" onclick="window.open('https://calendar.google.com/calendar/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
-            <span class="icon">📅</span>
-            <span class="label">Calendar</span>
-          </button>
-          <button class="app-card" onclick="window.open('https://drive.google.com/drive/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
-            <span class="icon">☁️</span>
-            <span class="label">Drive</span>
-          </button>
-          <button class="app-card" onclick="window.open('https://docs.google.com/document/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
-            <span class="icon">📄</span>
-            <span class="label">Docs</span>
-          </button>
-          <button class="app-card" onclick="window.open('https://docs.google.com/spreadsheets/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
-            <span class="icon">📊</span>
-            <span class="label">Sheets</span>
-          </button>
-          <button class="app-card" onclick="window.open('https://docs.google.com/presentation/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
-            <span class="icon">📽️</span>
-            <span class="label">Slides</span>
-          </button>
-          <button class="app-card" onclick="window.open('https://keep.google.com/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
-            <span class="icon">🗒️</span>
-            <span class="label">Keep</span>
-          </button>
-          <button class="app-card" onclick="window.open('https://meet.google.com/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
-            <span class="icon">📹</span>
-            <span class="label">Meet</span>
-          </button>
-
-          <button class="app-card" onclick="window.open('https://gemini.google.com/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
-            <span class="icon">✨</span>
-            <span class="label">Gemini</span>
-          </button>
-          <button class="app-card" onclick="window.open('https://chatgpt.com/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
-            <span class="icon">🤖</span>
-            <span class="label">ChatGPT</span>
-          </button>
-          <button class="app-card" onclick="window.open('https://app.slack.com/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
-            <span class="icon">💬</span>
-            <span class="label">Slack</span>
-          </button>
+  <div class="dashboard-wrapper">
+    
+    <aside class="sidebar">
+      <div class="brand">
+        <h2>Workspace</h2>
+        <span class="version">Dashboard</span>
+      </div>
+      
+      <div class="nav-group">
+        <h3>QUICK LINKS</h3>
+        <button class="nav-item" onclick="launchApp('https://mail.google.com/mail/u/0/')">
+          <span class="icon">📧</span> Mail
+        </button>
+        <button class="nav-item" onclick="launchApp('https://drive.google.com/drive/u/0/')">
+          <span class="icon">📁</span> Drive
+        </button>
+        <button class="nav-item" onclick="launchApp('https://docs.google.com/document/u/0/')">
+          <span class="icon">📝</span> Docs
+        </button>
+        <button class="nav-item" onclick="launchApp('https://keep.google.com/u/0/')">
+          <span class="icon">🗒️</span> Keep
+        </button>
         </div>
+      
+      <div class="sidebar-footer">
+        <p>All tools open using your browser's Google session.</p>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="main-header">
+        <h1>Welcome back</h1>
+        <p>Your personal workspace at a glance</p>
+      </header>
+
+      <div class="widgets-grid">
+        <div class="widget card">
+          <div class="widget-header">
+            <h3>📅 Calendar</h3>
+            <button class="text-link" onclick="launchApp('https://calendar.google.com/calendar/u/0/')">Open full calendar →</button>
+          </div>
+          <div class="widget-body">
+            <iframe src="https://calendar.google.com/calendar/embed?src=en.usa%23holiday%40group.v.calendar.google.com&ctz=America%2FNew_York" style="border: 0" width="100%" height="300" frameborder="0" scrolling="no"></iframe>
+          </div>
+        </div>
+
+        <div class="widget card">
+          <div class="widget-header">
+            <h3>📝 Quick Notes</h3>
+            <button id="clear-btn" class="clear-btn">Clear</button>
+          </div>
+          <div class="widget-body notes-body">
+            <textarea id="notes-area" placeholder="Ready..."></textarea>
+          </div>
+        </div>
+      </div>
+    </main>
+
+  </div>
   <script src="app.js"></script>
 </body>
 </html>
