@@ -8,25 +8,7 @@
   <link rel="manifest" href="app.webmanifest">
 </head>
 <body>
-  <div class="app-container">
-    <header>
-      <div class="header-titles">
-        <h1>Workspace Dashboard</h1>
-        <span class="subtitle">All data stays on device</span>
-      </div>
-      <div class="account-select">
-        <label for="account">Account:</label>
-        <select id="account">
-          <option>Personal (0)</option>
-          <option>Work (1)</option>
-        </select>
-      </div>
-    </header>
-
-    <main>
-      <section class="grid-section">
-        <h2>Workspace Apps</h2>
-        <div class="app-grid">
+  <div class="app-grid">
           <button class="app-card" onclick="window.open('https://mail.google.com/mail/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
             <span class="icon">📧</span>
             <span class="label">Gmail</span>
@@ -55,22 +37,24 @@
             <span class="icon">🗒️</span>
             <span class="label">Keep</span>
           </button>
+          <button class="app-card" onclick="window.open('https://meet.google.com/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
+            <span class="icon">📹</span>
+            <span class="label">Meet</span>
+          </button>
+
           <button class="app-card" onclick="window.open('https://gemini.google.com/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
             <span class="icon">✨</span>
             <span class="label">Gemini</span>
           </button>
+          <button class="app-card" onclick="window.open('https://chatgpt.com/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
+            <span class="icon">🤖</span>
+            <span class="label">ChatGPT</span>
+          </button>
+          <button class="app-card" onclick="window.open('https://app.slack.com/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
+            <span class="icon">💬</span>
+            <span class="label">Slack</span>
+          </button>
         </div>
-      </section>
-
-      <section class="notes-section">
-        <div class="notes-header">
-          <h2>Quick Notes</h2>
-          <button id="clear-btn" class="clear-btn">Clear</button>
-        </div>
-        <textarea id="notes-area" placeholder="Jot down ideas, tasks, or reminders. Everything is saved automatically in your browser..."></textarea>
-      </section>
-    </main>
-  </div>
   <script src="app.js"></script>
 </body>
 </html>
