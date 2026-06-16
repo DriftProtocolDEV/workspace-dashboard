@@ -3,66 +3,124 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Workspace</title>
+  <title>Workspace PWA</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="app.webmanifest">
 </head>
 <body>
-  <div class="dashboard-wrapper">
+  <div class="app-container">
     
     <aside class="sidebar">
-      <div class="brand">
-        <h2>Workspace</h2>
-        <span class="version">Dashboard</span>
+      <div class="brand-header">
+        <div class="logo-icon"></div>
+        <h2>WORKSPACE PWA</h2>
       </div>
-      
-      <div class="nav-group">
-        <h3>QUICK LINKS</h3>
-        <button class="nav-item" onclick="launchApp('https://mail.google.com/mail/u/0/')">
-          <span class="icon">📧</span> Mail
-        </button>
-        <button class="nav-item" onclick="launchApp('https://drive.google.com/drive/u/0/')">
-          <span class="icon">📁</span> Drive
-        </button>
-        <button class="nav-item" onclick="launchApp('https://docs.google.com/document/u/0/')">
-          <span class="icon">📝</span> Docs
-        </button>
-        <button class="nav-item" onclick="launchApp('https://keep.google.com/u/0/')">
-          <span class="icon">🗒️</span> Keep
-        </button>
+
+      <div class="section">
+        <h3 class="section-title">GOOGLE SESSION SETTINGS</h3>
+        <label class="input-label">Active Account</label>
+        <div class="account-selector">
+          <span class="user-icon">👤</span>
+          <span>Default (authuser=0)</span>
         </div>
-      
-      <div class="sidebar-footer">
-        <p>All tools open using your browser's Google session.</p>
+        
+        <button class="chrome-profile-btn">
+          <span class="btn-icon">➔]</span> Use Chrome Google profile
+        </button>
+        <p class="status-text">Gmail bridge active with Chrome profile token</p>
+      </div>
+
+      <div class="section notes-section">
+        <div class="notes-header">
+          <div>
+            <h3 class="section-title">QUICK NOTES</h3>
+            <p class="notes-subtitle">Autosaved locally</p>
+          </div>
+          <button id="clear-btn" class="trash-btn">🗑️</button>
+        </div>
+        <textarea id="notes-area" placeholder="Capture links, reminders, snippets, or handoff notes here."></textarea>
       </div>
     </aside>
 
-    <main class="main-content">
-      <header class="main-header">
-        <h1>Welcome back</h1>
-        <p>Your personal workspace at a glance</p>
+    <main class="launcher-main">
+      <header class="launcher-header">
+        <div class="header-left">
+          <span class="shield-icon">🛡️</span>
+          <h1>Workspace Launcher</h1>
+        </div>
+        <button class="forward-btn">→</button>
       </header>
 
-      <div class="widgets-grid">
-        <div class="widget card">
-          <div class="widget-header">
-            <h3>📅 Calendar</h3>
-            <button class="text-link" onclick="launchApp('https://calendar.google.com/calendar/u/0/')">Open full calendar →</button>
-          </div>
-          <div class="widget-body">
-            <iframe src="https://calendar.google.com/calendar/embed?src=en.usa%23holiday%40group.v.calendar.google.com&ctz=America%2FNew_York" style="border: 0" width="100%" height="300" frameborder="0" scrolling="no"></iframe>
-          </div>
-        </div>
+      <div class="search-container">
+        <input type="text" placeholder="Search Google or enter a URL...">
+        <button class="search-btn">✈️</button>
+      </div>
 
-        <div class="widget card">
-          <div class="widget-header">
-            <h3>📝 Quick Notes</h3>
-            <button id="clear-btn" class="clear-btn">Clear</button>
-          </div>
-          <div class="widget-body notes-body">
-            <textarea id="notes-area" placeholder="Ready..."></textarea>
-          </div>
-        </div>
+      <div class="app-grid">
+        <button class="app-card" onclick="launchApp('https://mail.google.com/mail/u/0/')">
+          <img src="https://ssl.gstatic.com/images/branding/product/1x/gmail_2020q4_48dp.png" alt="Gmail">
+          <span>Gmail</span>
+        </button>
+        <button class="app-card" onclick="launchApp('https://calendar.google.com/calendar/u/0/')">
+          <img src="https://ssl.gstatic.com/images/branding/product/1x/calendar_2020q4_48dp.png" alt="Calendar">
+          <span>Calendar</span>
+        </button>
+        <button class="app-card" onclick="launchApp('https://drive.google.com/drive/u/0/')">
+          <img src="https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_48dp.png" alt="Drive">
+          <span>Drive</span>
+        </button>
+        
+        <button class="app-card" onclick="launchApp('https://docs.google.com/document/u/0/')">
+          <img src="https://ssl.gstatic.com/images/branding/product/1x/docs_2020q4_48dp.png" alt="Docs">
+          <span>Docs</span>
+        </button>
+        <button class="app-card" onclick="launchApp('https://docs.google.com/spreadsheets/u/0/')">
+          <img src="https://ssl.gstatic.com/images/branding/product/1x/sheets_2020q4_48dp.png" alt="Sheets">
+          <span>Sheets</span>
+        </button>
+        <button class="app-card" onclick="launchApp('https://docs.google.com/presentation/u/0/')">
+          <img src="https://ssl.gstatic.com/images/branding/product/1x/slides_2020q4_48dp.png" alt="Slides">
+          <span>Slides</span>
+        </button>
+        
+        <button class="app-card" onclick="launchApp('https://meet.google.com/')">
+          <img src="https://ssl.gstatic.com/images/branding/product/1x/meet_2020q4_48dp.png" alt="Meet">
+          <span>Meet</span>
+        </button>
+        <button class="app-card" onclick="launchApp('https://gemini.google.com/')">
+          <span class="emoji-icon">✨</span>
+          <span>Gemini</span>
+        </button>
+        <button class="app-card" onclick="launchApp('https://keep.google.com/u/0/')">
+          <img src="https://ssl.gstatic.com/images/branding/product/1x/keep_2020q4_48dp.png" alt="Keep">
+          <span>Keep</span>
+        </button>
+
+        <button class="app-card" onclick="launchApp('https://mail.google.com/chat/u/0/')">
+          <img src="https://ssl.gstatic.com/images/branding/product/1x/chat_2020q4_48dp.png" alt="Chat">
+          <span>Chat</span>
+        </button>
+        <button class="app-card" onclick="launchApp('https://contacts.google.com/u/0/')">
+          <img src="https://ssl.gstatic.com/images/branding/product/1x/contacts_2022_48dp.png" alt="Contacts">
+          <span>Contacts</span>
+        </button>
+        <button class="app-card" onclick="launchApp('https://calendar.google.com/calendar/u/0/r/tasks')">
+          <span class="emoji-icon">✅</span>
+          <span>Tasks</span>
+        </button>
+
+        <button class="app-card" onclick="launchApp('https://app.slack.com/')">
+          <span class="emoji-icon">💬</span>
+          <span>Slack</span>
+        </button>
+        <button class="app-card" onclick="launchApp('https://chatgpt.com/')">
+          <span class="emoji-icon">🤖</span>
+          <span>ChatGPT</span>
+        </button>
+        <button class="app-card" onclick="launchApp('https://github.com/')">
+          <span class="emoji-icon">🐙</span>
+          <span>GitHub</span>
+        </button>
       </div>
     </main>
 
