@@ -1,11 +1,25 @@
-// Register Service Worker
+// Register Service Worker for PWA functionality
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js');
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
   });
 }
 
-// Handle Quick Notes LocalStorage
+// HYBRID LAUNCHER: Handles Extensions vs PWA
+function launchApp(url) {
+  // Check if we are running inside a Chrome Extension context
+  const isExtension = (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id);
+  
+  if (isExtension) {
+    // If inside the side panel extension, open in a standard new tab safely
+    window.open(url, '_blank');
+  } else {
+    // If running as the standalone PWA, open as a native-looking floating window
+    window.open(url, '_blank', 'width=1100,height=800,menubar=no,toolbar=no,location=no,status=no');
+  }
+}
+
+// QUICK NOTES LOGIC
 const notesArea = document.getElementById('notes-area');
 const clearBtn = document.getElementById('clear-btn');
 
