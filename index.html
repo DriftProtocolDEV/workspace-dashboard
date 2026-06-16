@@ -6,107 +6,71 @@
   <title>Workspace Dashboard</title>
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="app.webmanifest">
-  <meta name="theme-color" content="#0f172a">
-  <meta name="description" content="Premium personal Workspace Dashboard PWA">
 </head>
 <body>
-  <div class="app-window">
-    <!-- Fake Native Title Bar -->
-    <div class="title-bar">
-      <div class="window-controls">
-        <div class="control close"></div>
-        <div class="control minimize"></div>
-        <div class="control maximize"></div>
+  <div class="app-container">
+    <header>
+      <div class="header-titles">
+        <h1>Workspace Dashboard</h1>
+        <span class="subtitle">All data stays on device</span>
       </div>
-      <div class="title">Workspace Dashboard</div>
-      <div class="account-switcher">
-        <label for="account-select">Account:</label>
-        <select id="account-select">
-          <option value="0">Personal (0)</option>
-          <option value="1">Work (1)</option>
-          <option value="2">Account 2</option>
-          <option value="3">Account 3</option>
+      <div class="account-select">
+        <label for="account">Account:</label>
+        <select id="account">
+          <option>Personal (0)</option>
+          <option>Work (1)</option>
         </select>
       </div>
-    </div>
+    </header>
 
-    <div class="main-content">
-      <!-- Workspace Apps Launcher -->
-      <section class="launcher-section">
-        <div class="section-header">
-          <h2>Workspace Apps</h2>
-          <p class="subtitle">Click to open in dedicated window</p>
-        </div>
-        
-        <div class="launcher-grid">
-          <button class="app-button" data-app="gmail" data-url="https://mail.google.com/mail/u/">
-            <div class="app-icon">📧</div>
-            <div class="app-name">Gmail</div>
-            <div class="app-desc">Email</div>
+    <main>
+      <section class="grid-section">
+        <h2>Workspace Apps</h2>
+        <div class="app-grid">
+          <button class="app-card" onclick="window.open('https://mail.google.com/mail/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
+            <span class="icon">📧</span>
+            <span class="label">Gmail</span>
           </button>
-
-          <button class="app-button" data-app="calendar" data-url="https://calendar.google.com/calendar/u/">
-            <div class="app-icon">📅</div>
-            <div class="app-name">Calendar</div>
-            <div class="app-desc">Schedule</div>
+          <button class="app-card" onclick="window.open('https://calendar.google.com/calendar/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
+            <span class="icon">📅</span>
+            <span class="label">Calendar</span>
           </button>
-
-          <button class="app-button" data-app="drive" data-url="https://drive.google.com/drive/u/">
-            <div class="app-icon">☁️</div>
-            <div class="app-name">Drive</div>
-            <div class="app-desc">Files</div>
+          <button class="app-card" onclick="window.open('https://drive.google.com/drive/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
+            <span class="icon">☁️</span>
+            <span class="label">Drive</span>
           </button>
-
-          <button class="app-button" data-app="docs" data-url="https://docs.google.com/document/u/">
-            <div class="app-icon">📄</div>
-            <div class="app-name">Docs</div>
-            <div class="app-desc">Documents</div>
+          <button class="app-card" onclick="window.open('https://docs.google.com/document/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
+            <span class="icon">📄</span>
+            <span class="label">Docs</span>
           </button>
-
-          <button class="app-button" data-app="sheets" data-url="https://docs.google.com/spreadsheets/u/">
-            <div class="app-icon">📊</div>
-            <div class="app-name">Sheets</div>
-            <div class="app-desc">Spreadsheets</div>
+          <button class="app-card" onclick="window.open('https://docs.google.com/spreadsheets/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
+            <span class="icon">📊</span>
+            <span class="label">Sheets</span>
           </button>
-
-          <button class="app-button" data-app="slides" data-url="https://docs.google.com/presentation/u/">
-            <div class="app-icon">📽️</div>
-            <div class="app-name">Slides</div>
-            <div class="app-desc">Presentations</div>
+          <button class="app-card" onclick="window.open('https://docs.google.com/presentation/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
+            <span class="icon">📽️</span>
+            <span class="label">Slides</span>
           </button>
-
-          <button class="app-button" data-app="keep" data-url="https://keep.google.com/u/">
-            <div class="app-icon">🗒️</div>
-            <div class="app-name">Keep</div>
-            <div class="app-desc">Notes</div>
+          <button class="app-card" onclick="window.open('https://keep.google.com/u/0/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
+            <span class="icon">🗒️</span>
+            <span class="label">Keep</span>
           </button>
-
-          <button class="app-button" data-app="gemini" data-url="https://gemini.google.com/app?authuser=">
-            <div class="app-icon">✨</div>
-            <div class="app-name">Gemini</div>
-            <div class="app-desc">AI Assistant</div>
+          <button class="app-card" onclick="window.open('https://gemini.google.com/', '_blank', 'width=1100,height=800,menubar=no,toolbar=no')">
+            <span class="icon">✨</span>
+            <span class="label">Gemini</span>
           </button>
         </div>
       </section>
 
-      <!-- Quick Notes -->
       <section class="notes-section">
-        <div class="section-header">
+        <div class="notes-header">
           <h2>Quick Notes</h2>
-          <div class="notes-actions">
-            <span id="save-status" class="save-status">Saved locally</span>
-            <button id="clear-notes" class="clear-btn">Clear</button>
-          </div>
+          <button id="clear-btn" class="clear-btn">Clear</button>
         </div>
-        <textarea id="quick-notes" placeholder="Jot down ideas, tasks, or reminders. Everything is saved automatically in your browser..."></textarea>
+        <textarea id="notes-area" placeholder="Jot down ideas, tasks, or reminders. Everything is saved automatically in your browser..."></textarea>
       </section>
-    </div>
-
-    <div class="status-bar">
-      <span>Workspace Dashboard • PWA • All data stays on device</span>
-    </div>
+    </main>
   </div>
-
   <script src="app.js"></script>
 </body>
 </html>
