@@ -10,111 +10,100 @@
   <meta name="description" content="Personal static PWA dashboard for Google Workspace tools and quick notes.">
 </head>
 <body>
-  <div class="app-container">
-    <!-- Sidebar -->
-    <aside id="sidebar-left" class="sidebar">
-      <div class="sidebar-brand">
-        <div class="brand-logo">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
-        </div>
-        <span class="brand-name">Workspace</span>
-      </div>
-
-      <!-- Account Switcher -->
-      <div class="account-switcher-panel">
-        <div class="panel-section-title">Google Session</div>
-        <div class="custom-select-wrapper">
-          <label for="account-select" class="field-label">Active Account</label>
-          <div class="select-container">
-            <select id="account-select">
-              <option value="0">Account 0</option>
-              <option value="1">Account 1</option>
-              <option value="2">Account 2</option>
-              <option value="3">Account 3</option>
-            </select>
-          </div>
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">◆</div>
+        <div>
+          <p class="brand-title">Workspace Dashboard</p>
+          <p class="brand-subtitle">Frontend-only PWA</p>
         </div>
       </div>
 
-      <!-- Quick Notes -->
-      <section class="sidebar-notes">
-        <div class="notes-header">
-          <div>
-            <div class="panel-section-title">Quick Notes</div>
-          </div>
-          <button id="notes-clear-btn" class="notes-icon-btn" type="button" title="Clear notes">🗑</button>
-        </div>
-        <textarea id="quick-notes" class="quick-notes" spellcheck="true" placeholder="Capture links, reminders, snippets..."></textarea>
-        <div id="notes-save-status" class="notes-save-status">Ready</div>
+      <section class="sidebar-section">
+        <p class="section-label">Google Session</p>
+        <label class="field-label" for="account-select">Active Account</label>
+        <select id="account-select">
+          <option value="0">Account 0</option>
+          <option value="1">Account 1</option>
+          <option value="2">Account 2</option>
+          <option value="3">Account 3</option>
+        </select>
       </section>
 
-      <div class="sidebar-footer">
-        <p class="hint">Static PWA • Data in browser only • Links use your Google session</p>
-      </div>
+      <section class="sidebar-section">
+        <p class="section-label">Sidebar Apps</p>
+        <nav class="sidebar-links" aria-label="Google Workspace services">
+          <a class="sidebar-link" data-app-url-template="https://mail.google.com/mail/u/{account}/" href="https://mail.google.com/mail/u/0/" target="_blank" rel="noopener noreferrer">Gmail</a>
+          <a class="sidebar-link" data-app-url-template="https://calendar.google.com/calendar/u/{account}/r" href="https://calendar.google.com/calendar/u/0/r" target="_blank" rel="noopener noreferrer">Calendar</a>
+          <a class="sidebar-link" data-app-url-template="https://drive.google.com/drive/u/{account}/my-drive" href="https://drive.google.com/drive/u/0/my-drive" target="_blank" rel="noopener noreferrer">Drive</a>
+          <a class="sidebar-link" data-app-url-template="https://docs.google.com/document/u/{account}/" href="https://docs.google.com/document/u/0/" target="_blank" rel="noopener noreferrer">Docs</a>
+          <a class="sidebar-link" data-app-url-template="https://docs.google.com/spreadsheets/u/{account}/" href="https://docs.google.com/spreadsheets/u/0/" target="_blank" rel="noopener noreferrer">Sheets</a>
+          <a class="sidebar-link" data-app-url-template="https://docs.google.com/presentation/u/{account}/" href="https://docs.google.com/presentation/u/0/" target="_blank" rel="noopener noreferrer">Slides</a>
+          <a class="sidebar-link" data-app-url-template="https://keep.google.com/u/{account}/" href="https://keep.google.com/u/0/" target="_blank" rel="noopener noreferrer">Keep</a>
+          <a class="sidebar-link" data-app-url-template="https://gemini.google.com/?authuser={account}" href="https://gemini.google.com/?authuser=0" target="_blank" rel="noopener noreferrer">Gemini</a>
+        </nav>
+      </section>
+
+      <p class="sidebar-footnote">No backend • No API keys • All data stays in your browser</p>
     </aside>
 
-    <!-- Main Workspace -->
-    <main id="main-panel" class="main-content">
-      <header class="app-header">
-        <div class="header-left">
-          <button id="menu-toggle-btn" class="header-icon-btn" title="Toggle Sidebar">☰</button>
-          <h1 id="active-app-title">Dashboard</h1>
-          <span id="active-account-badge" class="badge">Session 0</span>
-        </div>
-
-        <div class="address-bar-container">
-          <input type="text" id="workspace-url-display" readonly value="">
-          <button id="copy-url-btn" class="address-bar-btn" title="Copy URL">⎘</button>
-        </div>
-
-        <div class="header-right">
-          <button id="workspace-refresh-btn" class="header-icon-btn" title="Reload">⟳</button>
-          <button id="workspace-open-btn" class="header-icon-btn" title="Open in New Tab">↗</button>
-          <div class="divider"></div>
-          <button id="launcher-toggle-btn" class="header-icon-btn highlight" title="Toggle Launcher">Apps</button>
-        </div>
+    <main class="main-panel">
+      <header class="hero">
+        <p class="hero-eyebrow">Google Workspace launcher</p>
+        <h1>Launch tools fast, keep notes local.</h1>
+        <p class="hero-copy">Google apps open in secure new tabs because high-security services block iframe embedding by design.</p>
       </header>
 
-      <div class="iframe-viewport">
-        <iframe id="workspace-iframe" title="Workspace" allow="clipboard-write"></iframe>
-        <div id="workspace-frame-fallback" class="frame-fallback hidden">
-          <div class="frame-fallback-panel">
-            <h2>Content blocked or loading</h2>
-            <p>Some Google apps block embedding. Use "Open in new tab" for full access.</p>
-            <div class="frame-fallback-actions">
-              <button id="workspace-retry-btn">Retry</button>
-              <button id="workspace-fallback-open-btn">Open tab</button>
-            </div>
+      <section class="content-grid">
+        <section class="notes-card" aria-labelledby="notes-heading">
+          <div class="notes-card-header">
+            <h2 id="notes-heading">Quick Notes</h2>
+            <button id="notes-clear-btn" type="button">Clear</button>
           </div>
-        </div>
-      </div>
-    </main>
+          <textarea id="quick-notes" spellcheck="true" placeholder="Capture reminders, links, snippets, and tasks..."></textarea>
+          <p id="notes-save-status">Ready</p>
+        </section>
 
-    <!-- Launcher Panel -->
-    <aside id="sandbox-panel" class="sandbox-sidebar">
-      <div class="sandbox-header">
-        <span>Launcher</span>
-        <button id="sandbox-close-btn" class="header-icon-btn">×</button>
-      </div>
-      <div class="sandbox-controls">
-        <form id="sandbox-nav-form" class="sandbox-search-box">
-          <input type="text" id="sandbox-query-input" placeholder="Search or enter URL...">
-          <button type="submit" class="sandbox-go-btn">→</button>
-        </form>
-        <nav class="sandbox-quick-links" aria-label="Quick apps">
-          <button class="quick-link-btn" data-title="Gmail" data-url="https://mail.google.com/mail/">Gmail</button>
-          <button class="quick-link-btn" data-title="Calendar" data-url="https://calendar.google.com/calendar/r">Calendar</button>
-          <button class="quick-link-btn" data-title="Drive" data-url="https://drive.google.com/drive/my-drive">Drive</button>
-          <button class="quick-link-btn" data-title="Docs" data-url="https://docs.google.com/document/">Docs</button>
-          <button class="quick-link-btn" data-title="Sheets" data-url="https://sheets.google.com/">Sheets</button>
-          <button class="quick-link-btn" data-title="Slides" data-url="https://slides.google.com/">Slides</button>
-          <button class="quick-link-btn" data-title="Gemini" data-url="https://gemini.google.com/">Gemini</button>
-          <button class="quick-link-btn" data-title="Keep" data-url="https://keep.google.com/">Keep</button>
-        </nav>
-      </div>
-    </aside>
+        <section class="apps-card" aria-labelledby="apps-heading">
+          <h2 id="apps-heading">Workspace Apps</h2>
+          <div class="app-grid">
+            <a class="app-tile" data-app-url-template="https://mail.google.com/mail/u/{account}/" href="https://mail.google.com/mail/u/0/" target="_blank" rel="noopener noreferrer">
+              <span class="app-tile-title">Gmail</span>
+              <span class="app-tile-subtitle">Mail and inbox triage</span>
+            </a>
+            <a class="app-tile" data-app-url-template="https://calendar.google.com/calendar/u/{account}/r" href="https://calendar.google.com/calendar/u/0/r" target="_blank" rel="noopener noreferrer">
+              <span class="app-tile-title">Calendar</span>
+              <span class="app-tile-subtitle">Schedule and meetings</span>
+            </a>
+            <a class="app-tile" data-app-url-template="https://drive.google.com/drive/u/{account}/my-drive" href="https://drive.google.com/drive/u/0/my-drive" target="_blank" rel="noopener noreferrer">
+              <span class="app-tile-title">Drive</span>
+              <span class="app-tile-subtitle">Files and folders</span>
+            </a>
+            <a class="app-tile" data-app-url-template="https://docs.google.com/document/u/{account}/" href="https://docs.google.com/document/u/0/" target="_blank" rel="noopener noreferrer">
+              <span class="app-tile-title">Docs</span>
+              <span class="app-tile-subtitle">Documents</span>
+            </a>
+            <a class="app-tile" data-app-url-template="https://docs.google.com/spreadsheets/u/{account}/" href="https://docs.google.com/spreadsheets/u/0/" target="_blank" rel="noopener noreferrer">
+              <span class="app-tile-title">Sheets</span>
+              <span class="app-tile-subtitle">Spreadsheets</span>
+            </a>
+            <a class="app-tile" data-app-url-template="https://docs.google.com/presentation/u/{account}/" href="https://docs.google.com/presentation/u/0/" target="_blank" rel="noopener noreferrer">
+              <span class="app-tile-title">Slides</span>
+              <span class="app-tile-subtitle">Presentations</span>
+            </a>
+            <a class="app-tile" data-app-url-template="https://keep.google.com/u/{account}/" href="https://keep.google.com/u/0/" target="_blank" rel="noopener noreferrer">
+              <span class="app-tile-title">Keep</span>
+              <span class="app-tile-subtitle">Sticky notes</span>
+            </a>
+            <a class="app-tile" data-app-url-template="https://gemini.google.com/?authuser={account}" href="https://gemini.google.com/?authuser=0" target="_blank" rel="noopener noreferrer">
+              <span class="app-tile-title">Gemini</span>
+              <span class="app-tile-subtitle">AI assistant</span>
+            </a>
+          </div>
+        </section>
+      </section>
+    </main>
   </div>
 
   <script src="app.js"></script>

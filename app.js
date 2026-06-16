@@ -1,187 +1,90 @@
-// Workspace Dashboard - Static PWA Version
-// Adapted from the rich extension dashboard to work as a pure static site on GitHub Pages.
-// No chrome.* APIs. Embedding relies on user's browser cookies + fallbacks.
-// Launcher tries to load Google apps in the central iframe; blocked ones show fallback + "Open tab".
-
-const state = {
-  currentAccount: 0,
-  currentTab: 'dashboard'
+const STORAGE_KEYS = {
+  notes: 'workspace-notes',
+  account: 'workspace-active-account'
 };
 
-function withActiveGoogleAccount(url) {
-  try {
-    const parsed = new URL(url);
-    if (!parsed.hostname.endsWith('google.com')) return url;
-    const account = state.currentAccount;
-    const map = {
-      'mail.google.com': `https://mail.google.com/mail/u/${account}/`,
-      'calendar.google.com': `https://calendar.google.com/calendar/u/${account}/r`,
-      'drive.google.com': `https://drive.google.com/drive/u/${account}/my-drive`,
-      'docs.google.com': `https://docs.google.com/document/u/${account}/`,
-      'sheets.google.com': `https://docs.google.com/spreadsheets/u/${account}/`,
-      'slides.google.com': `https://docs.google.com/presentation/u/${account}/`
-    };
-    if (map[parsed.hostname]) return map[parsed.hostname];
-    parsed.searchParams.set('authuser', account);
-    return parsed.toString();
-  } catch (e) {
-    return url;
-  }
-}
+const state = {
+  currentAccount: 0
+};
 
-function openInWorkspace(url, title = 'Workspace') {
-  const iframe = document.getElementById('workspace-iframe');
-  const fallback = document.getElementById('workspace-frame-fallback');
-  const urlDisplay = document.getElementById('workspace-url-display');
-  const titleEl = document.getElementById('active-app-title');
-  const badge = document.getElementById('active-account-badge');
-
-  const finalUrl = withActiveGoogleAccount(url);
-
-  urlDisplay.value = finalUrl;
-  titleEl.textContent = title;
-  badge.textContent = `Session ${state.currentAccount}`;
-  fallback.classList.add('hidden');
-
-  iframe.src = finalUrl;
-
-  // 7s fallback if content likely blocked (common for Gmail/Drive/Calendar in static PWA)
-  clearTimeout(window._fallbackTimer);
-  window._fallbackTimer = setTimeout(() => {
-    if (!iframe.contentWindow || iframe.src === 'about:blank') {
-      fallback.classList.remove('hidden');
-    }
-  }, 7000);
+function updateAppLinks(account) {
+  const links = document.querySelectorAll('[data-app-url-template]');
+  links.forEach((link) => {
+    const template = link.getAttribute('data-app-url-template');
+    if (!template) return;
+    link.setAttribute('href', template.replace('{account}', String(account)));
+  });
 }
 
 function saveQuickNotes() {
-  const notes = document.getElementById('quick-notes');
-  localStorage.setItem('workspace-notes', notes.value);
-  document.getElementById('notes-save-status').textContent = 'Saved';
+  const notesEl = document.getElementById('quick-notes');
+  const statusEl = document.getElementById('notes-save-status');
+  if (!notesEl || !statusEl) return;
+  localStorage.setItem(STORAGE_KEYS.notes, notesEl.value);
+  statusEl.textContent = 'Saved';
 }
 
 function loadQuickNotes() {
-  const notes = document.getElementById('quick-notes');
-  notes.value = localStorage.getItem('workspace-notes') || '';
-  document.getElementById('notes-save-status').textContent = 'Ready';
+  const notesEl = document.getElementById('quick-notes');
+  const statusEl = document.getElementById('notes-save-status');
+  if (!notesEl || !statusEl) return;
+  notesEl.value = localStorage.getItem(STORAGE_KEYS.notes) || '';
+  statusEl.textContent = 'Ready';
+}
+
+function loadAccount() {
+  const storedAccount = localStorage.getItem(STORAGE_KEYS.account);
+  if (!storedAccount) return 0;
+  const parsed = Number.parseInt(storedAccount, 10);
+  return Number.isNaN(parsed) ? 0 : Math.min(Math.max(parsed, 0), 3);
 }
 
 function setupEventListeners() {
-  // Account switcher
   const accountSelect = document.getElementById('account-select');
-  accountSelect.value = state.currentAccount;
-  accountSelect.addEventListener('change', (e) => {
-    state.currentAccount = parseInt(e.target.value, 10);
-    // Refresh current view with new account
-    const currentUrl = document.getElementById('workspace-url-display').value || 'https://calendar.google.com/calendar/r';
-    openInWorkspace(currentUrl, document.getElementById('active-app-title').textContent);
-  });
-
-  // Notes
   const notesEl = document.getElementById('quick-notes');
-  const clearNotesBtn = document.getElementById('notes-clear-btn');
+  const clearBtn = document.getElementById('notes-clear-btn');
+  const statusEl = document.getElementById('notes-save-status');
+
+  if (!accountSelect || !notesEl || !clearBtn || !statusEl) return;
+
+  accountSelect.addEventListener('change', (event) => {
+    const selected = Number.parseInt(event.target.value, 10);
+    state.currentAccount = Number.isNaN(selected) ? 0 : selected;
+    localStorage.setItem(STORAGE_KEYS.account, String(state.currentAccount));
+    updateAppLinks(state.currentAccount);
+  });
+
   notesEl.addEventListener('input', () => {
-    document.getElementById('notes-save-status').textContent = 'Saving...';
-    clearTimeout(window._notesTimer);
-    window._notesTimer = setTimeout(saveQuickNotes, 400);
+    statusEl.textContent = 'Saving...';
+    clearTimeout(window.quickNotesTimer);
+    window.quickNotesTimer = setTimeout(saveQuickNotes, 300);
   });
-  clearNotesBtn.addEventListener('click', () => {
+
+  clearBtn.addEventListener('click', () => {
     notesEl.value = '';
-    localStorage.removeItem('workspace-notes');
-    document.getElementById('notes-save-status').textContent = 'Cleared';
-  });
-
-  // Header buttons
-  document.getElementById('workspace-refresh-btn').addEventListener('click', () => {
-    const url = document.getElementById('workspace-url-display').value;
-    if (url) openInWorkspace(url, document.getElementById('active-app-title').textContent);
-  });
-  document.getElementById('workspace-open-btn').addEventListener('click', () => {
-    const url = document.getElementById('workspace-url-display').value;
-    if (url) window.open(url, '_blank');
-  });
-  document.getElementById('copy-url-btn').addEventListener('click', () => {
-    const url = document.getElementById('workspace-url-display').value;
-    navigator.clipboard.writeText(url);
-  });
-
-  // Launcher buttons
-  document.querySelectorAll('.quick-link-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const url = btn.getAttribute('data-url');
-      const title = btn.getAttribute('data-title') || 'App';
-      openInWorkspace(url, title);
-    });
-  });
-
-  // Sandbox nav form (search / direct URL)
-  const navForm = document.getElementById('sandbox-nav-form');
-  const queryInput = document.getElementById('sandbox-query-input');
-  navForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    let destination = queryInput.value.trim();
-    if (!destination.startsWith('http')) {
-      destination = `https://www.google.com/search?q=${encodeURIComponent(destination)}`;
-    }
-    openInWorkspace(destination, 'Search');
-    queryInput.value = '';
-  });
-
-  // Sidebar toggle (simple for static)
-  const menuBtn = document.getElementById('menu-toggle-btn');
-  const sidebar = document.getElementById('sidebar-left');
-  menuBtn.addEventListener('click', () => {
-    sidebar.style.display = sidebar.style.display === 'none' ? 'flex' : 'none';
-  });
-
-  // Launcher toggle
-  const launcherBtn = document.getElementById('launcher-toggle-btn');
-  const launcher = document.getElementById('sandbox-panel');
-  launcherBtn.addEventListener('click', () => {
-    launcher.style.display = launcher.style.display === 'none' ? 'flex' : 'none';
-  });
-  document.getElementById('sandbox-close-btn').addEventListener('click', () => {
-    launcher.style.display = 'none';
-  });
-
-  // Fallback buttons
-  document.getElementById('workspace-retry-btn').addEventListener('click', () => {
-    const url = document.getElementById('workspace-url-display').value;
-    if (url) openInWorkspace(url, document.getElementById('active-app-title').textContent);
-  });
-  document.getElementById('workspace-fallback-open-btn').addEventListener('click', () => {
-    const url = document.getElementById('workspace-url-display').value;
-    if (url) window.open(url, '_blank');
-  });
-
-  // Keyboard support
-  document.addEventListener('keydown', (e) => {
-    if (e.key === '/' && document.activeElement.tagName === 'BODY') {
-      e.preventDefault();
-      document.getElementById('sandbox-query-input').focus();
-    }
+    localStorage.removeItem(STORAGE_KEYS.notes);
+    statusEl.textContent = 'Cleared';
   });
 }
 
-// Initialize
 document.addEventListener('DOMContentLoaded', () => {
+  state.currentAccount = loadAccount();
+  const accountSelect = document.getElementById('account-select');
+  if (accountSelect) {
+    accountSelect.value = String(state.currentAccount);
+  }
+
+  updateAppLinks(state.currentAccount);
   loadQuickNotes();
   setupEventListeners();
 
-  // Initial view - open Calendar by default (works reasonably in iframe)
-  openInWorkspace('https://calendar.google.com/calendar/r', 'Calendar');
-
-  // PWA Service Worker registration (from the bill)
+  // PWA Service Worker registration (preserved)
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('Workspace Dashboard PWA: SW registered', reg.scope))
-        .catch(err => console.warn('SW registration failed', err));
+      navigator.serviceWorker
+        .register('sw.js')
+        .then((reg) => console.log('Workspace Dashboard PWA: SW registered', reg.scope))
+        .catch((err) => console.warn('SW registration failed', err));
     });
   }
-
-  // Expose debug helper
-  window.workspaceDebug = () => ({ currentAccount: state.currentAccount });
 });
-
-console.log('%c[Workspace Dashboard] Static PWA ready. Rich launcher + iframe workspace + local notes. Embedding limited without extension privileges.', 'color:#64748b');
